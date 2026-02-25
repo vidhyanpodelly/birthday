@@ -6,94 +6,113 @@
 <title>Letters For You</title>
 
 <style>
-html,body{
+
+/* ---------- BASE ---------- */
+html, body{
   margin:0;
   padding:0;
   height:100%;
   width:100%;
-  overflow:hidden;
   font-family:Arial, sans-serif;
+  overflow-x:hidden;
 }
 
+/* ---------- PAGE ---------- */
 .page{
   display:none;
-  height:100vh;
-  width:100vw;
+  min-height:100dvh;
+  width:100%;
   position:relative;
 }
 
 .show{
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
 }
 
+/* ---------- STORY FULLSCREEN ---------- */
 .fullscreen{
-  width:100vw;
-  height:100vh;
+  width:100%;
+  height:100dvh;
   object-fit:cover;
 }
 
-/* buttons */
+/* ---------- BUTTONS ---------- */
 button{
-  position:absolute;
   padding:12px 20px;
-  font-size:18px;
+  font-size:16px;
   border:none;
   border-radius:8px;
   cursor:pointer;
 }
 
 .yes{
-  bottom:80px;
-  left:40%;
   background:#c92f4a;
   color:white;
 }
 
 .no{
-  bottom:80px;
-  right:40%;
   background:#444;
   color:white;
 }
 
 .back{
+  position:fixed;
   top:20px;
-  left:20px;
+  left:15px;
   background:black;
   color:white;
+  z-index:10;
 }
 
-/* sad */
+/* ---------- START ---------- */
+#start .buttons{
+  position:absolute;
+  bottom:80px;
+  display:flex;
+  gap:20px;
+}
+
+/* ---------- SAD ---------- */
 .sadText{
-  font-size:28px;
+  font-size:24px;
+  margin-bottom:20px;
 }
 
-/* letters */
+/* ---------- LETTERS ---------- */
 #letters{
   background:#f4f1ec;
-  overflow:auto;
+  justify-content:flex-start;
+  padding-top:20px;
 }
 
 .grid{
+  width:100%;
+  max-width:600px;
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:30px;
-  margin-top:60px;
-  padding:20px;
+  gap:20px;
+  padding:15px;
 }
 
 .letter img{
   width:100%;
-  max-width:260px;
 }
 
 .label{
-  font-size:20px;
   text-align:center;
+  font-size:18px;
 }
+
+/* ---------- MOBILE ---------- */
+@media (max-width:600px){
+  .grid{
+    gap:15px;
+  }
+}
+
 </style>
 </head>
 
@@ -102,8 +121,10 @@ button{
 <!-- START -->
 <div id="start" class="page show">
   <img src="start.png" class="fullscreen">
-  <button class="yes" onclick="go('letters')">Yes</button>
-  <button class="no" onclick="go('sad')">No</button>
+  <div class="buttons">
+    <button class="yes" onclick="go('letters')">Yes</button>
+    <button class="no" onclick="go('sad')">No</button>
+  </div>
 </div>
 
 <!-- SAD -->
@@ -117,6 +138,7 @@ button{
   <h2>Letters for you 💌</h2>
 
   <div class="grid">
+
     <div class="letter" onclick="openLetter(1)">
       <img id="l1" src="closed.png">
       <div class="label">Letter 1</div>
@@ -136,60 +158,48 @@ button{
       <img id="l4" src="closed.png">
       <div class="label">Letter 4</div>
     </div>
+
   </div>
 </div>
 
 <!-- CONTENT -->
 <div id="c1" class="page">
-  <button class="back" onclick="go('letters')">← Back</button>
+  <button class="back" onclick="go('letters')">Back</button>
   <img src="page1.png" class="fullscreen">
 </div>
 
 <div id="c2" class="page">
-  <button class="back" onclick="go('letters')">← Back</button>
+  <button class="back" onclick="go('letters')">Back</button>
   <img src="page2.png" class="fullscreen">
 </div>
 
 <div id="c3" class="page">
-  <button class="back" onclick="go('letters')">← Back</button>
+  <button class="back" onclick="go('letters')">Back</button>
   <img src="page3.png" class="fullscreen">
 </div>
 
 <div id="c4" class="page">
-  <button class="back" onclick="go('letters')">← Back</button>
+  <button class="back" onclick="go('letters')">Back</button>
   <img src="page4.png" class="fullscreen">
 </div>
 
+
 <script>
 
+/* navigation */
 function go(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
   document.getElementById(id).classList.add("show");
 }
 
-/* keep letters opened */
-let opened = [false,false,false,false];
+/* keep opened */
+let opened=[false,false,false,false];
 
 function openLetter(n){
-  opened[n-1] = true;
+  opened[n-1]=true;
   document.getElementById("l"+n).src="opened.png";
-  setTimeout(()=>{
-    go("c"+n);
-  },400);
+  setTimeout(()=>{ go("c"+n); },300);
 }
-
-/* restore opened letters when returning */
-function restore(){
-  for(let i=1;i<=4;i++){
-    if(opened[i-1]){
-      document.getElementById("l"+i).src="opened.png";
-    }
-  }
-}
-
-/* run restore whenever letters page is shown */
-const lettersPage = document.getElementById("letters");
-lettersPage.addEventListener("show", restore);
 
 </script>
 
