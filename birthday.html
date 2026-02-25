@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letters For You</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+}
+
+.page{
+  display:none;
+  height:100vh;
+  width:100vw;
+  position:relative;
+}
+
+.show{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+.fullscreen{
+  width:100vw;
+  height:100vh;
+  object-fit:cover;
+}
+
+/* buttons */
+button{
+  position:absolute;
+  padding:12px 20px;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.yes{
+  bottom:80px;
+  left:40%;
+  background:#c92f4a;
+  color:white;
+}
+
+.no{
+  bottom:80px;
+  right:40%;
+  background:#444;
+  color:white;
+}
+
+.back{
+  top:20px;
+  left:20px;
+  background:black;
+  color:white;
+}
+
+/* sad */
+.sadText{
+  font-size:28px;
+}
+
+/* letters */
+#letters{
+  background:#f4f1ec;
+  overflow:auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:30px;
+  margin-top:60px;
+  padding:20px;
+}
+
+.letter img{
+  width:100%;
+  max-width:260px;
+}
+
+.label{
+  font-size:20px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- START -->
+<div id="start" class="page show">
+  <img src="start.png" class="fullscreen">
+  <button class="yes" onclick="go('letters')">Yes</button>
+  <button class="no" onclick="go('sad')">No</button>
+</div>
+
+<!-- SAD -->
+<div id="sad" class="page show">
+  <div class="sadText">Why did you click No 😭</div>
+  <button class="yes" onclick="go('start')">Try Again</button>
+</div>
+
+<!-- LETTERS -->
+<div id="letters" class="page">
+  <h2>Letters for you 💌</h2>
+
+  <div class="grid">
+    <div class="letter" onclick="openLetter(1)">
+      <img id="l1" src="closed.png">
+      <div class="label">Letter 1</div>
+    </div>
+
+    <div class="letter" onclick="openLetter(2)">
+      <img id="l2" src="closed.png">
+      <div class="label">Letter 2</div>
+    </div>
+
+    <div class="letter" onclick="openLetter(3)">
+      <img id="l3" src="closed.png">
+      <div class="label">Letter 3</div>
+    </div>
+
+    <div class="letter" onclick="openLetter(4)">
+      <img id="l4" src="closed.png">
+      <div class="label">Letter 4</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div id="c1" class="page">
+  <button class="back" onclick="go('letters')">← Back</button>
+  <img src="page1.png" class="fullscreen">
+</div>
+
+<div id="c2" class="page">
+  <button class="back" onclick="go('letters')">← Back</button>
+  <img src="page2.png" class="fullscreen">
+</div>
+
+<div id="c3" class="page">
+  <button class="back" onclick="go('letters')">← Back</button>
+  <img src="page3.png" class="fullscreen">
+</div>
+
+<div id="c4" class="page">
+  <button class="back" onclick="go('letters')">← Back</button>
+  <img src="page4.png" class="fullscreen">
+</div>
+
+<script>
+
+function go(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
+  document.getElementById(id).classList.add("show");
+}
+
+/* keep letters opened */
+let opened = [false,false,false,false];
+
+function openLetter(n){
+  opened[n-1] = true;
+  document.getElementById("l"+n).src="opened.png";
+  setTimeout(()=>{
+    go("c"+n);
+  },400);
+}
+
+/* restore opened letters when returning */
+function restore(){
+  for(let i=1;i<=4;i++){
+    if(opened[i-1]){
+      document.getElementById("l"+i).src="opened.png";
+    }
+  }
+}
+
+/* run restore whenever letters page is shown */
+const lettersPage = document.getElementById("letters");
+lettersPage.addEventListener("show", restore);
+
+</script>
+
+</body>
+</html>
