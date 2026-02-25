@@ -2,99 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Letters For You</title>
 
 <style>
-
-/* ---------- BASE ---------- */
-html, body{
+body{
   margin:0;
-  padding:0;
-  height:100%;
-  width:100%;
   font-family:Arial, sans-serif;
-  overflow-x:hidden;
 }
 
-/* ---------- PAGE ---------- */
+/* hide pages */
 .page{
   display:none;
-  min-height:100dvh;
-  width:100%;
-  position:relative;
+  padding:20px;
+  text-align:center;
 }
-
 .show{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
+  display:block;
 }
 
-/* ---------- STORY FULLSCREEN ---------- */
-.fullscreen{
+/* start */
+.start img{
   width:100%;
-  height:100dvh;
-  object-fit:cover;
+  max-width:400px;
+  border-radius:10px;
 }
 
-/* ---------- BUTTONS ---------- */
+.buttons{
+  margin-top:20px;
+}
+
 button{
-  padding:12px 20px;
+  padding:12px 18px;
   font-size:16px;
   border:none;
   border-radius:8px;
+  margin:8px;
   cursor:pointer;
 }
 
-.yes{
-  background:#c92f4a;
-  color:white;
-}
+.yes{background:#c92f4a;color:white;}
+.no{background:#444;color:white;}
 
-.no{
-  background:#444;
-  color:white;
-}
-
-.back{
-  position:fixed;
-  top:20px;
-  left:15px;
-  background:black;
-  color:white;
-  z-index:10;
-}
-
-/* ---------- START ---------- */
-#start .buttons{
-  position:absolute;
-  bottom:80px;
-  display:flex;
-  gap:20px;
-}
-
-/* ---------- SAD ---------- */
+/* sad */
 .sadText{
-  font-size:24px;
+  font-size:22px;
   margin-bottom:20px;
 }
 
-/* ---------- LETTERS ---------- */
+/* letters */
 #letters{
   background:#f4f1ec;
-  justify-content:flex-start;
-  padding-top:20px;
+  min-height:100vh;
 }
 
 .grid{
-  width:100%;
-  max-width:600px;
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:20px;
-  padding:15px;
+  gap:15px;
 }
 
 .letter img{
@@ -102,15 +67,19 @@ button{
 }
 
 .label{
-  text-align:center;
-  font-size:18px;
+  font-size:16px;
 }
 
-/* ---------- MOBILE ---------- */
-@media (max-width:600px){
-  .grid{
-    gap:15px;
-  }
+/* content pages */
+.content img{
+  width:100%;
+  border-radius:10px;
+}
+
+.back{
+  margin-bottom:15px;
+  background:black;
+  color:white;
 }
 
 </style>
@@ -119,8 +88,8 @@ button{
 <body>
 
 <!-- START -->
-<div id="start" class="page show">
-  <img src="start.png" class="fullscreen">
+<div id="start" class="page start show">
+  <img src="start.png">
   <div class="buttons">
     <button class="yes" onclick="go('letters')">Yes</button>
     <button class="no" onclick="go('sad')">No</button>
@@ -128,7 +97,7 @@ button{
 </div>
 
 <!-- SAD -->
-<div id="sad" class="page show">
+<div id="sad" class="page">
   <div class="sadText">Why did you click No 😭</div>
   <button class="yes" onclick="go('start')">Try Again</button>
 </div>
@@ -138,7 +107,6 @@ button{
   <h2>Letters for you 💌</h2>
 
   <div class="grid">
-
     <div class="letter" onclick="openLetter(1)">
       <img id="l1" src="closed.png">
       <div class="label">Letter 1</div>
@@ -158,49 +126,43 @@ button{
       <img id="l4" src="closed.png">
       <div class="label">Letter 4</div>
     </div>
-
   </div>
 </div>
 
 <!-- CONTENT -->
-<div id="c1" class="page">
+<div id="c1" class="page content">
   <button class="back" onclick="go('letters')">Back</button>
-  <img src="page1.png" class="fullscreen">
+  <img src="page1.png">
 </div>
 
-<div id="c2" class="page">
+<div id="c2" class="page content">
   <button class="back" onclick="go('letters')">Back</button>
-  <img src="page2.png" class="fullscreen">
+  <img src="page2.png">
 </div>
 
-<div id="c3" class="page">
+<div id="c3" class="page content">
   <button class="back" onclick="go('letters')">Back</button>
-  <img src="page3.png" class="fullscreen">
+  <img src="page3.png">
 </div>
 
-<div id="c4" class="page">
+<div id="c4" class="page content">
   <button class="back" onclick="go('letters')">Back</button>
-  <img src="page4.png" class="fullscreen">
+  <img src="page4.png">
 </div>
-
 
 <script>
-
-/* navigation */
 function go(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("show"));
   document.getElementById(id).classList.add("show");
 }
 
-/* keep opened */
 let opened=[false,false,false,false];
 
 function openLetter(n){
   opened[n-1]=true;
   document.getElementById("l"+n).src="opened.png";
-  setTimeout(()=>{ go("c"+n); },300);
+  setTimeout(()=>go("c"+n),200);
 }
-
 </script>
 
 </body>
